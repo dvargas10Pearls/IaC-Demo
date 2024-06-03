@@ -4,6 +4,7 @@ import { DemoApi } from "./constructs/demo-api";
 import { DemoTable } from "./constructs/demo-table";
 import { PostItemEndpoint } from "./constructs/endpoints/post-item-endpoint";
 import { ApiResourceNames } from "./consts";
+import { GetItemsEndpoint } from "./constructs/endpoints/get-items-endpoint";
 
 type IaCDemoStackProps = { stage: string } & cdk.StackProps;
 
@@ -18,6 +19,11 @@ export class IaCDemoStack extends cdk.Stack {
     });
 
     new PostItemEndpoint(this, "PostItemEndpoint", {
+      table,
+      resource: apiResources[ApiResourceNames.ITEM],
+      stage: props.stage,
+    });
+    new GetItemsEndpoint(this, "GetItemsEndpoint", {
       table,
       resource: apiResources[ApiResourceNames.ITEM],
       stage: props.stage,

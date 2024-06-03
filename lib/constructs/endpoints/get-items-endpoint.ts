@@ -4,27 +4,27 @@ import * as apiGateway from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
 import { createEndpointLambda } from "../../factories/create-endpoint-lambda";
 
-interface PostItemEndpointProps extends StackProps {
+interface GetItemEndpointProps extends StackProps {
   table: dynamodb.ITable;
   resource: apiGateway.IResource;
   stage: string;
 }
 
-export class PostItemEndpoint extends Construct {
+export class GetItemsEndpoint extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { table, resource, stage }: PostItemEndpointProps
+    { table, resource, stage }: GetItemEndpointProps
   ) {
     super(scope, id);
     const lambda = createEndpointLambda({
       scope,
-      functionName: "post-item-endpoint",
+      functionName: "get-items-endpoint",
       table,
-      dynamoActions: ["dynamodb:PutItem"],
+      dynamoActions: ["dynamodb:Scan"],
       stage,
     });
 
-    resource.addMethod('POST', new apiGateway.LambdaIntegration(lambda))
+    resource.addMethod('GET', new apiGateway.LambdaIntegration(lambda))
   }
 }
