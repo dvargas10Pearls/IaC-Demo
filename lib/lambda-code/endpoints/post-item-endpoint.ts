@@ -8,6 +8,7 @@ import {
 } from './common/response';
 import { ItemIdQueryParam } from './common/request';
 import { isParameterMissing } from './common/utils';
+import { ItemsService } from './service/items-service';
 
 export const handler = async (
   event: APIGatewayEvent,
@@ -21,16 +22,8 @@ export const handler = async (
   }
 
   try {
-    const dynamoDbClient = new DynamoDBClient();
-    const docClient = DynamoDBDocumentClient.from(dynamoDbClient);
-    const command = new PutCommand({
-      TableName: process.env.DEMO_TABLE_NAME,
-      Item: {
-        id
-      },
-    });
-    const dynamoResponse = await docClient.send(command);
-    return new BasicResponseType(200, JSON.stringify(dynamoResponse));
+    await ItemsService.postItem(id)
+    return new BasicResponseType(200, "Success");
   } catch (error) {
     return new ServerErrorResponse(error, awsRequestId);
   }
