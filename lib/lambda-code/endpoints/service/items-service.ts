@@ -14,16 +14,5 @@ export class ItemsService {
 
     return dynamoResponse.Items;
   }
-
-  public static postItem = async (id: string) => {
-    console.log("Running post item with ID: ", id)
-    const command = new PutCommand({
-      TableName: process.env.DEMO_TABLE_NAME,
-      Item: {
-        id
-      },
-    });
-    await this.dynamoClient.send(command);
-    console.log("Success posting item")
-  }
+  
 }
